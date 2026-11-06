@@ -76,9 +76,9 @@ Rencana:
 6. Perbarui README, security/operasi, description/topics repo; push; tunggu Actions dan periksa deployment commit yang sama.
 
 Acceptance tambahan:
-- [ ] `npm run lint` dan actionlint lulus tanpa mengabaikan temuan keamanan secara luas.
-- [ ] Gitleaks tidak menemukan credential pada seluruh history, sumber saat ini, atau export. Local `.env` diabaikan dan tidak dilayani web.
-- [ ] CI/CD aktual lulus di GitHub; PR tidak mendapat secret deployment, dan build yang diuji adalah build yang dipublikasikan.
-- [ ] Deployment otomatis tetap Hobby gratis, dengan pemeriksaan hash/commit serta smoke produksi.
-- [ ] Health workflow dapat dijalankan; SLO ditulis sebagai target, dengan batas sampling yang jelas.
-- [ ] README, description, topics, rujukan, dan bukti proses sesuai implementasi yang benar-benar tersedia.
+- [x] `npm run lint` dan actionlint lulus tanpa mengabaikan temuan keamanan secara luas.
+- [x] Gitleaks tidak menemukan credential pada seluruh history, sumber saat ini, atau export. Local `.env` diabaikan dan tidak dilayani web.
+- [x] CI/CD aktual lulus di GitHub; PR tidak mendapat secret deployment, dan build yang diuji adalah build yang dipublikasikan.
+- [x] Deployment otomatis tetap Hobby gratis, dengan pemeriksaan hash/commit serta smoke produksi.
+- [x] Health workflow dapat dijalankan; SLO ditulis sebagai target, dengan batas sampling yang jelas.
+- [x] README, description, topics, rujukan, dan bukti proses sesuai implementasi yang benar-benar tersedia.

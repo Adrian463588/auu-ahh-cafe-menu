@@ -4,7 +4,7 @@ Ruang lingkupnya adalah proyek portofolio statis dengan satu maintainer. Input y
 
 | Risiko | Kontrol | Bukti yang bisa dijalankan |
 | --- | --- | --- |
-| Credential masuk source/artefak | `.env` diabaikan; encrypted Actions Secret hanya untuk publikasi; Gitleaks dengan redaksi dan rule Vercel tambahan | `npm run security:secrets`, history penuh dan export; smoke jalur privat |
+| Credential masuk source/artefak | `.env` diabaikan; encrypted Actions Secret hanya untuk publikasi; Gitleaks dengan redaksi dan rule Vercel tambahan | `npm run security:secrets`, history penuh termasuk diff merge-parent, sumber tracked dan export; smoke jalur privat |
 | Supply chain dependency/action | Lockfile, lifecycle scripts instalasi dinonaktifkan, audit semua severity, Actions full commit SHA, binary tool dengan SHA-256 | `npm ci --ignore-scripts`, `npm audit --audit-level=low`, `npm run tools:install` |
 | Pipeline atau PR mendapat akses berlebih | `contents: read`, checkout tanpa credential persisten, job deploy terpisah; hanya push `main` terbaru dapat deploy | Kondisi workflow, pemeriksaan event/ref/repo/SHA di skrip deployment |
 | Artefak berubah setelah diuji | Artefak immutable Actions; manifest source SHA dan hash setiap file/config; tambahan/perubahan file ditolak | Tes integritas pada `npm test`; `verifyRelease` sebelum upload |

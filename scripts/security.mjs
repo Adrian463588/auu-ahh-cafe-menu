@@ -21,7 +21,7 @@ const canary = spawnSync(executable, ["stdin", ...flags], {
 });
 if (canary.error || canary.status !== 1) throw new Error("Gitleaks detection control failed.");
 console.log("Gitleaks detection control passed (generated value never printed).");
-execFileSync(executable, ["git", ".", "--log-opts=--all", ...flags], { stdio: "inherit" });
+execFileSync(executable, ["git", ".", "--log-opts=--all --full-history -m", ...flags], { stdio: "inherit" });
 
 const cache = resolve(".cache");
 await mkdir(cache, { recursive: true });
