@@ -10,3 +10,4 @@ test-results/
 playwright-report/
 evidence/
 .cache/
+build-manifest.json

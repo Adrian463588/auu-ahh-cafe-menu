@@ -1,0 +1,10 @@
+title = "AUU AHH Cafe secret scanning"
+
+[extend]
+useDefault = true
+
+[[rules]]
+id = "vercel-vcp-token"
+description = "Vercel token with vcp prefix"
+regex = '''\bvcp_[A-Za-z0-9]{30,}\b'''
+keywords = ["vcp_"]
