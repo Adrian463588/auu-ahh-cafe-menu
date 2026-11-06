@@ -10,6 +10,8 @@ Tanggal: 6 November 2026 (Asia/Jakarta). Hasil di bawah berasal dari eksekusi, b
 
 ## Pemeriksaan lokal
 
+Bagian baseline ini mencatat verifikasi awal aplikasi sebelum perluasan pipeline. Hasil tambahan portofolio dicatat di bagian berikutnya; status remote terkini dapat diperiksa melalui workflow yang ditautkan.
+
 | Pemeriksaan | Hasil |
 | --- | --- |
 | `npm test` | 4/4 lulus: kelengkapan/harga katalog, data keranjang tidak valid, batas jumlah, perhitungan dan teks bon |
@@ -48,3 +50,22 @@ Kasus gangguan storage/clipboard diuji dengan fault injection khusus pengujian. 
 ## Batas bukti
 
 Dialog cetak sistem, printer fisik, kunjungan pertama/reload offline, pemrosesan kasir, pembayaran, stok, dan data performa lapangan tidak diuji atau diklaim. Tidak ada integrasi tersebut pada situs ini.
+
+## Perluasan portofolio DevSecOps
+
+Pemeriksaan lokal 6 November 2026:
+
+- `npm ci --ignore-scripts`: berhasil dari lockfile baru, 221 paket diaudit.
+- `npm run lint`: ESLint 10 lulus dengan **0 warning**, termasuk aturan Next/TypeScript/React Hooks dan guardrails evaluasi kode.
+- `npm run lint:workflows`: actionlint 1.7.12 lulus untuk CI/CD dan health workflow.
+- `npm audit --audit-level=low`: **0 kerentanan** setelah override patched minimatch; tidak ada severity yang dikecualikan.
+- `npm test`: **5/5 lulus**, termasuk penolakan commit mismatch, artefak diubah/ditambah, dan environment file dalam export.
+- TypeScript dan production build lulus. Seluruh **12/12 browser test** lulus; klik brand/reset filter ikut diverifikasi setelah perbaikan lint.
+- Gitleaks 8.30.1: **0 temuan** pada 2 commit baseline, 40 file tracked saat itu, serta export publik. Canary yang dihasilkan saat pengujian ditolak oleh rule Vercel dan tidak pernah dicetak.
+- Binary Gitleaks/actionlint diverifikasi terhadap SHA-256 penerbit; scanner selalu memakai redaksi penuh.
+- `.env` tetap diabaikan Git; ACL Windows dibatasi ke pemilik akun, SYSTEM, dan Administrators. Nilai credential tidak dicetak.
+- GitHub repository secret VERCEL_TOKEN dan variables project/team dikonfigurasi; tidak ada nilai secret di source, artefak, atau README.
+- API GitHub mengonfirmasi default permission read, larangan bot approval, allowlist Actions GitHub-owned, wajib SHA pinning, serta dependency alerts aktif.
+- Branch protection `main`: PR, strict status **Quality and security gates**, enforce admins, force-push/deletion nonaktif. Satu maintainer tidak mensyaratkan approval kedua.
+
+Verifikasi remote dijalankan melalui [DevSecOps CI/CD](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml) pada PR/push dan [Service health](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/health.yml). Log run, artefak build/proof, dan `/build-info.json` adalah lokasi bukti aktual; konfigurasi workflow saja tidak membuktikan kelulusan. SLO 30 hari tetap berupa target sampai data yang cukup tersedia.

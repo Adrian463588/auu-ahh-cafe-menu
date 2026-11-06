@@ -12,7 +12,9 @@ test("catalog, search, category and browser history", async ({ page }) => {
   await expect(page.getByTestId("menu-item")).toHaveCount(5);
   await page.goBack();
   await expect(page.getByRole("button", { name: "Coffee Based", exact: true })).toHaveAttribute("aria-pressed", "true");
-  await page.getByRole("button", { name: "Semua menu", exact: true }).click();
+  await page.getByRole("link", { name: /AUU AHH/ }).click();
+  await expect(page.getByTestId("menu-item")).toHaveCount(32);
+  await expect(page).not.toHaveURL(/kategori=/);
   await page.getByRole("searchbox", { name: "Cari menu" }).fill("tidak-ada-menu-ini");
   await expect(page.getByRole("heading", { name: "Belum ketemu yang dicari?" })).toBeVisible();
   await page.getByRole("button", { name: "Tampilkan semua menu" }).click();

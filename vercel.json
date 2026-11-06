@@ -3,7 +3,7 @@
   "framework": null,
   "buildCommand": "",
   "installCommand": "",
-  "outputDirectory": ".",
+  "outputDirectory": "out",
   "cleanUrls": true,
   "headers": [{
     "source": "/(.*)",

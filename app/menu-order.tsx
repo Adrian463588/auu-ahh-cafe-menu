@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useRef, useState, type FormEvent } from "react";
+import Link from "next/link";
 import { categories, menu, type MenuItem } from "../lib/menu";
 import { cartLines, normalizeCart, orderText, rupiah, type CartEntry, type Customer } from "../lib/order";
 
@@ -58,6 +59,8 @@ export default function MenuOrder() {
       const raw = localStorage.getItem(storageKey);
       if (raw) {
         const saved = JSON.parse(raw);
+        // Device-only storage is restored after static hydration; the server cannot read it.
+        // eslint-disable-next-line react-hooks/set-state-in-effect
         setCart(normalizeCart(saved?.cart));
         if (saved?.customer && typeof saved.customer === "object") {
           setCustomer({
@@ -86,6 +89,8 @@ export default function MenuOrder() {
     try {
       localStorage.setItem(storageKey, JSON.stringify({ cart, customer }));
     } catch {
+      // An external storage write can fail; the user needs recovery feedback.
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setStorageNotice("Penyimpanan perangkat tidak tersedia. Pesanan tetap bisa dibuat selama halaman ini terbuka.");
     }
   }, [cart, customer, ready]);
@@ -100,8 +105,10 @@ export default function MenuOrder() {
     setCategory(nextCategory);
     setQuery(nextQuery);
     const url = new URL(window.location.href);
-    nextCategory === "all" ? url.searchParams.delete("kategori") : url.searchParams.set("kategori", nextCategory);
-    nextQuery ? url.searchParams.set("cari", nextQuery) : url.searchParams.delete("cari");
+    if (nextCategory === "all") url.searchParams.delete("kategori");
+    else url.searchParams.set("kategori", nextCategory);
+    if (nextQuery) url.searchParams.set("cari", nextQuery);
+    else url.searchParams.delete("cari");
     window.history[replace ? "replaceState" : "pushState"]({}, "", url);
   }
 
@@ -156,7 +163,7 @@ export default function MenuOrder() {
   return <>
     <a href="#menu" className="skip-link">Langsung ke menu</a>
     <header className="site-header shell">
-      <a className="brand" href="/"><Cup /><span>AUU AHH<span className="brand-sub">cafe & good company</span></span></a>
+      <Link className="brand" href="/" onClick={() => { setCategory("all"); setQuery(""); }}><Cup /><span>AUU AHH<span className="brand-sub">cafe & good company</span></span></Link>
       <nav aria-label="Navigasi utama"><a href="#menu">Menu</a><a href="#cara-pesan">Cara pesan</a><a href="#pesanan" className="header-order">Pesanan <span>{count}</span></a></nav>
     </header>
 

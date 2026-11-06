@@ -62,3 +62,23 @@ Pesanan hanya disimpan pada perangkat pengunjung. Penyusunan ringkasan bukan pen
 - [x] Repo privat, commit remote terverifikasi, deployment READY pada Hobby, dan URL produksi teruji. Lihat `VALIDATION.md`.
 
 Target performa: LCP <=2,5 detik, INP <=200ms, CLS <=0,1 pada p75. Pengukuran lab tidak dianggap bukti p75 lapangan.
+
+## Perluasan: portofolio DevOps / DevSecOps / SRE
+
+Permintaan 6 November 2026: fokus utama proyek adalah proses delivery dan operasi yang sederhana, aman, dapat dijalankan ulang, serta punya bukti GitHub Actions nyata.
+
+Rencana:
+1. Rujuk dokumentasi primer GitHub, OWASP CI/CD, NIST SSDF, Google SRE, dan Next.js.
+2. Tambahkan ESLint, actionlint, Gitleaks seluruh history/working tree/export, dan audit dependency; jaga isi `.env` di luar log/Git/artefak.
+3. CI pada push/PR: dependency terkunci, lint/types/unit, build, browser/axe, security gates. Pin Actions/tools dan batasi permissions.
+4. CD hanya sesudah gates lulus pada push `main`: verifikasi artefak/commit, gunakan secret deployment terpisah, cek paket Hobby, dan lakukan smoke test produksi.
+5. Tambahkan monitor harian tanpa secret, definisi SLI/SLO awal, serta runbook respons/rollback. Jangan mengarang data uptime atau insiden.
+6. Perbarui README, security/operasi, description/topics repo; push; tunggu Actions dan periksa deployment commit yang sama.
+
+Acceptance tambahan:
+- [ ] `npm run lint` dan actionlint lulus tanpa mengabaikan temuan keamanan secara luas.
+- [ ] Gitleaks tidak menemukan credential pada seluruh history, sumber saat ini, atau export. Local `.env` diabaikan dan tidak dilayani web.
+- [ ] CI/CD aktual lulus di GitHub; PR tidak mendapat secret deployment, dan build yang diuji adalah build yang dipublikasikan.
+- [ ] Deployment otomatis tetap Hobby gratis, dengan pemeriksaan hash/commit serta smoke produksi.
+- [ ] Health workflow dapat dijalankan; SLO ditulis sebagai target, dengan batas sampling yang jelas.
+- [ ] README, description, topics, rujukan, dan bukti proses sesuai implementasi yang benar-benar tersedia.
