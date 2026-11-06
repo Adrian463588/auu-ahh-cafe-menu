@@ -69,3 +69,15 @@ Pemeriksaan lokal 6 November 2026:
 - Branch protection `main`: PR, strict status **Quality and security gates**, enforce admins, force-push/deletion nonaktif. Satu maintainer tidak mensyaratkan approval kedua.
 
 Verifikasi remote dijalankan melalui [DevSecOps CI/CD](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml) pada PR/push dan [Service health](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/health.yml). Log run, artefak build/proof, dan `/build-info.json` adalah lokasi bukti aktual; konfigurasi workflow saja tidak membuktikan kelulusan. SLO 30 hari tetap berupa target sampai data yang cukup tersedia.
+
+### Bukti remote pertama
+
+| Bukti | Hasil aktual |
+| --- | --- |
+| [PR #1](https://github.com/Adrian463588/auu-ahh-cafe-menu/pull/1) / [run PR](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42161470183) | Quality/security lulus; job publikasi dan produksi skipped sesuai kebijakan PR |
+| [Run push main](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42161809911) | Ketiga job quality/security, deployment Hobby, dan smoke produksi lulus pada commit `f8d2029b76e4f1365e90863003efd13dfeb3b2a0` |
+| [Service health manual](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42162369564) | Probe lulus pada commit yang sama; ini satu eksekusi nyata, bukan data SLO 30 hari |
+| Artefak `static-release-f8d2029b76e4f1365e90863003efd13dfeb3b2a0` diunduh ulang | 27 fingerprint file/config cocok; source SHA cocok; SHA-256 manifest `222e4916f6620b45afe6e77c7c9e1cc8ba9c0ee0388941728322f83cc9245281`; Gitleaks dan pencocokan token aktual: 0 temuan |
+| Log PR dan push main | 88.445 dan 217.936 byte log dipindai dengan Gitleaks redacted serta dibandingkan dengan token lokal tanpa mencetaknya; 0 temuan |
+
+API audit tambahan menemukan default output directory proyek lama masih `.` meskipun deployment sudah memakai `out`. Rekonsiliasi `PATCH` setting proyek kini dijalankan setelah verifikasi main, dengan pemeriksaan respons; perubahan itu mengikuti PR/CI yang sama. Bukti run pertama di tabel merupakan catatan historis; run berikutnya dan commit terpasang terkini tersedia pada Actions dan `/build-info.json`.

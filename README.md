@@ -89,7 +89,7 @@ Pengujian browser memakai katalog nyata untuk alur pesanan, ringkasan, pencarian
 3. Ajukan perubahan melalui PR, periksa job **Quality and security gates**, lalu merge. Push `main` menjalankan deployment dan smoke secara otomatis.
 4. Alternatif operator lokal: sesudah gates dan commit terpush ke `main`, jalankan `npm run deploy`.
 
-Skrip menggunakan API resmi Vercel, memverifikasi paket **Hobby**, commit terbaru `main`, secret, dan integritas seluruh berkas sebelum publikasi. CI menjalankan `--prebuilt` pada artefak dari workflow yang sama. Hanya `out/` dan konfigurasi hosting yang diunggah; Vercel hanya melayani `out/`, sehingga checkout sumber tidak menjadi direktori web. Cara lokal membuat build lebih dahulu tanpa meneruskan token deployment ke proses build.
+Skrip menggunakan API resmi Vercel, memverifikasi paket **Hobby**, commit terbaru `main`, secret, dan integritas seluruh berkas sebelum publikasi. CI menjalankan `--prebuilt` pada artefak dari workflow yang sama. Hanya `out/` dan konfigurasi hosting yang diunggah; direktori output proyek Vercel diselaraskan secara permanen ke `out/`, sehingga checkout sumber tidak menjadi direktori web. Cara lokal membuat build lebih dahulu tanpa meneruskan token deployment ke proses build.
 
 `build-manifest.json` mengikat source commit dan SHA-256 setiap berkas export/config. `/build-info.json` publik hanya memuat commit dan waktu build, untuk membandingkan source dengan layanan yang benar-benar terpasang. Manifest, `.env`, `.git`, dependency, dan skrip operator tidak dilayani web. Identitas deployment disimpan lokal dalam `.vercel/`.
 
@@ -101,7 +101,7 @@ GitHub memakai runner Linux standar, timeout per job, dan retensi artefak 3–7 
 
 ## Operasi dan bukti
 
-Probe harian berjalan pukul **07:17 WIB** dan juga dapat dipicu melalui workflow **Service health**. Probe memeriksa HTML, 32 menu, latency satu request, source commit, header keamanan, checksum PDF, serta jalur privat yang wajib 404. Hasil JSON menjadi artefak Actions; kegagalan ditampilkan sebagai workflow gagal. Tidak ada layanan monitoring berbayar.
+Probe harian dijadwalkan pukul **07:17 WIB** dan juga dapat dipicu melalui workflow **Service health**; waktu eksekusi mengikuti penjadwalan GitHub yang dapat tertunda. Probe memeriksa HTML, 32 menu, latency satu request, source commit, header keamanan, checksum PDF, serta jalur privat yang wajib 404. Hasil JSON menjadi artefak Actions; kegagalan ditampilkan sebagai workflow gagal. Tidak ada layanan monitoring berbayar.
 
 Target awal: minimal 99% probe terjadwal berhasil selama 30 hari dan respons HTML pada tiap probe <=5 detik. Ini target untuk sinyal probe yang jarang, bukan klaim uptime, p95 pengguna, atau hasil 30 hari yang sudah tercapai.
 

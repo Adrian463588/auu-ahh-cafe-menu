@@ -5,11 +5,12 @@ import { prepareRelease, verifyRelease } from "./release.mjs";
 
 const token = process.env.VERCEL_TOKEN;
 const projectName = "auu-ahh-cafe-menu";
+const staticSettings = { framework: null, buildCommand: "", installCommand: "", outputDirectory: "out" };
 const git = (...args) => execFileSync("git", args, { encoding: "utf8" }).trim();
 
-async function api(path, body) {
+async function api(path, body, method = body ? "POST" : "GET") {
   const response = await fetch(`https://api.vercel.com${path}`, {
-    method: body ? "POST" : "GET",
+    method,
     headers: { Authorization: `Bearer ${token}`, "Content-Type": "application/json" },
     body: body ? JSON.stringify(body) : undefined,
     signal: AbortSignal.timeout(30_000),
@@ -63,6 +64,7 @@ async function main() {
   const digest = release.manifest.artifactSha256;
   const query = `?teamId=${encodeURIComponent(team.id)}`;
   let project = process.env.VERCEL_PROJECT_ID ? { projectId: process.env.VERCEL_PROJECT_ID, orgId: team.id } : undefined;
+  let needsOutputUpdate = false;
   if (!project) {
     try {
       project = JSON.parse(await readFile(".vercel/project.json", "utf8"));
@@ -75,16 +77,22 @@ async function main() {
     if (project.orgId !== team.id) throw new Error("Saved project belongs to a different team.");
     const existing = await api(`/v9/projects/${project.projectId}${query}`);
     if (existing.name !== projectName) throw new Error("Unexpected saved project name.");
+    needsOutputUpdate = existing.outputDirectory !== staticSettings.outputDirectory;
   } else {
-    const created = await api(`/v10/projects${query}`, { name: projectName, framework: null, buildCommand: "", installCommand: "", outputDirectory: "out" });
+    const created = await api(`/v10/projects${query}`, { name: projectName, ...staticSettings });
     project = { projectId: created.id, orgId: team.id };
   }
   await mkdir(".vercel", { recursive: true });
   await writeFile(".vercel/project.json", JSON.stringify(project, null, 2));
   await assertPublishedCommit(sha);
+  if (needsOutputUpdate) {
+    const updated = await api(`/v9/projects/${project.projectId}${query}`, { outputDirectory: staticSettings.outputDirectory }, "PATCH");
+    if (updated.outputDirectory !== staticSettings.outputDirectory) throw new Error("Project output directory was not persisted.");
+    console.log("Reconciled Vercel project output directory: out.");
+  }
   const deployment = await api(`/v13/deployments${query}`, {
     name: projectName, project: project.projectId, target: "production", files,
-    projectSettings: { framework: null, buildCommand: "", installCommand: "", outputDirectory: "out" },
+    projectSettings: staticSettings,
     gitMetadata: { remoteUrl: git("remote", "get-url", "origin"), commitSha: sha, commitRef: branch, dirty: false },
     meta: { sourceCommit: sha, artifactSha256: digest },
   });

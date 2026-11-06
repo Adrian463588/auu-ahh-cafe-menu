@@ -4,7 +4,7 @@ Layanan: https://auu-ahh-cafe-menu.vercel.app. Pemilik: maintainer repository. S
 
 ## Sinyal dan target awal
 
-Workflow `Service health` berjalan harian pukul 07:17 WIB dan secara manual. Workflow delivery menjalankan pemeriksaan yang sama sesudah publikasi, ditambah alur browser kasir. Lihat hasil aktual pada artefak `health-*` / `production-proof-*`, berkas `smoke.json`.
+Workflow `Service health` dijadwalkan harian pukul 07:17 WIB dan dapat dijalankan manual; eksekusi terjadwal GitHub dapat tertunda. Workflow delivery menjalankan pemeriksaan yang sama sesudah publikasi, ditambah alur browser kasir. Lihat hasil aktual pada artefak `health-*` / `production-proof-*`, berkas `smoke.json`.
 
 SLI: jumlah probe terjadwal yang lulus seluruh pemeriksaan dibagi jumlah probe yang benar-benar dieksekusi dalam 30 hari. SLO awal: >=99% lulus. Anggaran kegagalan: 1% dari probe yang dieksekusi. Target latency sampel: respons HTML <=5000ms, dengan timeout request 10 detik.
 
