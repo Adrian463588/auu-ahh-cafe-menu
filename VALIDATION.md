@@ -18,7 +18,7 @@ Tanggal: 6 November 2026 (Asia/Jakarta). Hasil di bawah berasal dari eksekusi, b
 | `npm run test:e2e` | 12/12 lulus pada production export lokal |
 | Audit ulang sesudah koreksi label logo | 5/5 ukuran layar lulus; mencakup WCAG 2.1 A/AA dan 2.2 AA |
 | `npm audit --audit-level=low` | 0 kerentanan |
-| Pemindaian secret sumber dan export | Tidak ditemukan kredensial pada 52 berkas saat pemeriksaan |
+| Pemindaian secret sumber dan export | Tidak ditemukan kredensial pada 53 berkas saat pemeriksaan setelah dokumentasi ditambahkan |
 | Git ignore | `.env`, `.vercel/`, `out/`, dan bukti lokal diabaikan |
 
 Alur browser mencakup katalog, Back/filter URL, pencarian kosong/reset, Hot/Ice, tambah/kurang/hapus, total Rp85.000 untuk 2 Matcha Latte Ice + 1 Chicken Katsu, nama wajib, pemulihan setelah reload, pilihan bawa pulang, catatan, dialog, Enter/Escape/pengembalian fokus, clipboard, CSS cetak, dan pesanan baru.
@@ -37,7 +37,13 @@ Kasus gangguan storage/clipboard diuji dengan fault injection khusus pengujian. 
 
 - Pembacaan API awal mengonfirmasi paket `hobby` pada akun tujuan.
 - Skrip deployment memeriksa kembali paket, Git bersih, commit remote, secret, dan export sebelum publikasi. Hanya hasil statis serta `vercel.json` yang dikirim.
-- Verifikasi repo, commit, status READY, URL publik, dan alur produksi dilakukan setelah commit sumber dipush; hasil akhirnya dicatat sesudah deployment.
+- Repo dibuat dengan `gh`, bersifat privat: [Adrian463588/auu-ahh-cafe-menu](https://github.com/Adrian463588/auu-ahh-cafe-menu).
+- Commit aplikasi `f8ebe7121ae9de665c7bc0c0f224c2497969a282` dipush dan dicocokkan dengan remote sebelum deployment; commit berikutnya hanya menyelesaikan dokumentasi verifikasi ini.
+- URL produksi: [auu-ahh-cafe-menu.vercel.app](https://auu-ahh-cafe-menu.vercel.app), HTTP 200 dan API menyatakan READY. API akun kembali mengonfirmasi paket `hobby` sesudah deployment.
+- Seluruh **12/12 browser test lulus di URL publik**, termasuk alur pesanan nyata dari katalog, penyimpanan perangkat, varian, jumlah, ringkasan, salin, keyboard, CSS cetak, error/offline, responsivitas, serta axe halaman/dialog pada lima ukuran.
+- PDF publik HTTP 200 dan SHA-256 cocok dengan sumber. `/.env`, `/.git/config`, `/package.json`, `/scripts/deploy.mjs` semuanya HTTP 404. Header `nosniff` dan Content Security Policy terverifikasi.
+- `.vercel/deployment.json` lokal menyimpan ID, source commit, SHA-256 artefak, status, dan URL deployment. `evidence/production-check.json` menyimpan hasil pemeriksaan publik. Keduanya diabaikan Git dan tidak memuat token.
+- Sesudah commit dokumentasi terakhir, jalankan deployment dari commit yang telah dipush; skrip mencatat commit tersebut di metadata. Alur utama dan pemeriksaan publik diulang untuk deployment final.
 
 ## Batas bukti
 

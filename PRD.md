@@ -59,6 +59,6 @@ Pesanan hanya disimpan pada perangkat pengunjung. Penyusunan ringkasan bukan pen
 - [x] Tidak ada overflow pada lebar 320/375/768/1024/1440px.
 - [x] Unit, TypeScript, build, browser, dan audit aksesibilitas lulus.
 - [x] Token hanya di `.env` lokal; tidak ada secret pada sumber/aset yang diperiksa. Upload hanya mengambil hasil statis.
-- [ ] Repo privat, commit remote terverifikasi, deployment READY pada Hobby, dan URL produksi teruji.
+- [x] Repo privat, commit remote terverifikasi, deployment READY pada Hobby, dan URL produksi teruji. Lihat `VALIDATION.md`.
 
 Target performa: LCP <=2,5 detik, INP <=200ms, CLS <=0,1 pada p75. Pengukuran lab tidak dianggap bukti p75 lapangan.

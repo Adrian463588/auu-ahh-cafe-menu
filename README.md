@@ -2,6 +2,8 @@
 
 Menu dan penyusun pesanan sederhana untuk proyek kuliah/personal. Dibuat dengan Next.js 16, React 19, dan TypeScript. Situs diekspor menjadi berkas statis; tidak memerlukan database, server function, atau layanan berbayar.
 
+[Buka website](https://auu-ahh-cafe-menu.vercel.app) · [Repo privat](https://github.com/Adrian463588/auu-ahh-cafe-menu)
+
 ## Fitur
 
 - 32 menu dalam 7 kategori dari dokumen asli, beserta harga dan varian Hot/Ice yang tercantum.
