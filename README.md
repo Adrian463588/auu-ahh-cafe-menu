@@ -1,11 +1,10 @@
 # AUU AHH Cafe — DevOps, DevSecOps & SRE Portfolio
 
-Portofolio sederhana untuk menunjukkan delivery aplikasi dari commit sampai layanan publik: CI/CD GitHub Actions, quality/security gates, integritas artefak, deployment Vercel Hobby, dan pemeriksaan kesehatan layanan. Aplikasi contohnya adalah menu dan ringkasan pesanan kafe, dibuat dengan Next.js 16, React 19, dan TypeScript.
+Portofolio sederhana untuk menunjukkan praktik DevOps dan DevSecOps pada aplikasi menu kafe: CI GitHub Actions, quality/security gates, integritas build, dan runbook operasi. Aplikasi dibuat dengan Next.js 16, React 19, dan TypeScript. Hosting Vercel yang pernah dipakai sudah didecommission; tidak ada situs produksi aktif.
 
-[![DevSecOps CI/CD](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml)
-[![Service health](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/health.yml/badge.svg)](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/health.yml)
+[![DevSecOps CI](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml)
 
-[Buka website](https://auu-ahh-cafe-menu.vercel.app) · [Repo privat](https://github.com/Adrian463588/auu-ahh-cafe-menu)
+[Repo privat](https://github.com/Adrian463588/auu-ahh-cafe-menu)
 
 Repo saat ini privat; akses source, badge, dan log Actions mengikuti izin GitHub. Hosting hanya memakai berkas statis, tanpa database atau runtime function.
 
@@ -13,22 +12,18 @@ Repo saat ini privat; akses source, badge, dan log Actions mengikuti izin GitHub
 
 | Area | Implementasi yang dapat diperiksa |
 | --- | --- |
-| DevOps | Pull request/push memicu CI; `npm ci` memakai lockfile; build yang telah diuji disimpan sebagai artefak dan dipublikasikan tanpa build ulang |
-| DevSecOps | ESLint/Next/TypeScript, Gitleaks history + sumber + export, audit dependency, Actions dengan SHA pinning/read-only token, checksum tool, secret khusus deployment, dan verifikasi hash/commit sebelum publikasi |
-| SRE | Smoke sesudah deploy, alur browser produksi, probe HTTP harian, latency sampel, target SLI/SLO awal, dan runbook investigasi/rollback |
+| DevOps | Pull request/push memicu CI; `npm ci` memakai lockfile; build dan hasil verifikasi terikat pada source commit |
+| DevSecOps | ESLint/Next/TypeScript, Gitleaks pada history + source + export, audit dependency, Actions dengan SHA pinning/read-only token, dan checksum tool |
+| Operasi | Runbook mencatat batas health probe dan decommission layanan; tidak ada endpoint produksi, probe berjadwal, atau klaim SLO aktif |
 
 ```mermaid
 flowchart LR
-  A[Push / Pull request] --> B[Lint · types · unit · dependency audit]
+  A[Pull request / push main] --> B[Lint · types · unit · dependency audit]
   B --> C[Build · secret scan · browser / axe]
-  C --> D[Artefak + source SHA + checksum]
-  D --> E{Push main yang masih terbaru?}
-  E -->|ya| F[Deploy artefak ke Vercel Hobby]
-  F --> G[HTTP smoke + alur kasir produksi]
-  H[Probe harian tanpa secret] --> G
+  C --> D[Verifikasi source SHA + checksum]
 ```
 
-PR dan pemicu manual hanya memverifikasi kode. Publikasi otomatis berjalan pada push `main` sesudah seluruh gates lulus. Secret Vercel tersedia hanya pada langkah publikasi; job tersebut tidak menginstal dependency aplikasi dan tidak membuat build baru.
+CI hanya memverifikasi source dan build; tidak ada langkah publikasi, secret hosting, atau health probe terjadwal. Untuk hosting baru diperlukan permintaan eksplisit dan credential baru.
 
 `main` mewajibkan PR dan status **Quality and security gates** yang mutakhir, termasuk untuk admin; force-push dan penghapusan branch diblokir. Proyek memakai satu maintainer, sehingga tidak mengklaim adanya persetujuan reviewer kedua.
 
@@ -82,31 +77,21 @@ ESLint 10 memakai plugin Next.js, TypeScript, dan React Hooks langsung. Dependen
 
 Pengujian browser memakai katalog nyata untuk alur pesanan, ringkasan, pencarian, dan varian. Kasus tambahan menguji storage rusak/diblokir, clipboard gagal, offline, keyboard, cetak, serta axe pada lebar 320/375/768/1024/1440px. Artefak lokal disimpan pada `test-results/` yang diabaikan Git. Hasil eksekusi dicatat di `VALIDATION.md`; jangan menganggap daftar perintah sebagai bukti kelulusan.
 
-## Deployment Vercel gratis
+## Status hosting
 
-1. Salin `.env.example` menjadi `.env`, lalu isi `VERCEL_TOKEN` secara lokal. File ini diabaikan Git dan upload. Jangan memakai awalan `NEXT_PUBLIC_`.
-2. Untuk CI/CD, simpan token sebagai encrypted repository secret **VERCEL_TOKEN**. Jangan menyalin `.env` ke repo atau artefak Actions. ID proyek/tim adalah repository variables **VERCEL_PROJECT_ID** dan **VERCEL_TEAM_ID**.
-3. Ajukan perubahan melalui PR, periksa job **Quality and security gates**, lalu merge. Push `main` menjalankan deployment dan smoke secara otomatis.
-4. Alternatif operator lokal: sesudah gates dan commit terpush ke `main`, jalankan `npm run deploy`.
+Proyek Vercel dan deployment yang sebelumnya aktif dihapus pada **10 November 2026** sesuai permintaan. Domain produksi, deployment, environment variables, dan pengaturan yang terikat pada proyek ikut terhapus. Repo GitHub privat dan source aplikasi tetap tersedia; tidak ada URL publik aktif.
 
-Skrip menggunakan API resmi Vercel, memverifikasi paket **Hobby**, commit terbaru `main`, secret, dan integritas seluruh berkas sebelum publikasi. CI menjalankan `--prebuilt` pada artefak dari workflow yang sama. Hanya `out/` dan konfigurasi hosting yang diunggah; direktori output proyek Vercel diselaraskan secara permanen ke `out/`, sehingga checkout sumber tidak menjadi direktori web. Cara lokal membuat build lebih dahulu tanpa meneruskan token deployment ke proses build.
+Credential deployment lokal dan GitHub Actions telah dicabut/dihapus. Workflow tidak melakukan deployment. `scripts/deploy.mjs` dan `scripts/smoke.mjs` dipertahankan sebagai kode contoh yang tidak dipanggil CI; menjalankannya memerlukan konfigurasi hosting baru dan credential baru. Jangan menghidupkan deployment atau membuat proyek hosting baru tanpa permintaan eksplisit.
 
-`build-manifest.json` mengikat source commit dan SHA-256 setiap berkas export/config. `/build-info.json` publik hanya memuat commit dan waktu build, untuk membandingkan source dengan layanan yang benar-benar terpasang. Manifest, `.env`, `.git`, dependency, dan skrip operator tidak dilayani web. Identitas deployment disimpan lokal dalam `.vercel/`.
-
-Skrip berhenti jika paket Hobby tidak tersedia. Jika ada beberapa akun Hobby, tetapkan `VERCEL_TEAM_ID` yang diinginkan di `.env`. Tidak ada perintah untuk upgrade, trial, pembelian domain, atau layanan berbayar.
-
-[Vercel Hobby](https://vercel.com/docs/plans/hobby) gratis untuk penggunaan pribadi/nonkomersial. Situs ini ditujukan untuk proyek edukasi/personal. Halaman yang telah dimuat tetap dapat dipakai saat offline; kunjungan pertama atau reload tanpa jaringan membutuhkan koneksi.
+Hosting sebelumnya menggunakan [Vercel Hobby](https://vercel.com/docs/plans/hobby), yang ditujukan untuk penggunaan personal/nonkomersial. Aturan paket itu hanya konteks untuk deployment historis, bukan konfigurasi aktif.
 
 GitHub memakai runner Linux standar, timeout per job, dan retensi artefak 3–7 hari. Pemakaian Actions pada repo privat tetap mengikuti kuota akun; tidak ada upgrade paket atau runner berbayar yang dikonfigurasi.
 
 ## Operasi dan bukti
 
-Probe harian dijadwalkan pukul **07:17 WIB** dan juga dapat dipicu melalui workflow **Service health**; waktu eksekusi mengikuti penjadwalan GitHub yang dapat tertunda. Probe memeriksa HTML, 32 menu, latency satu request, source commit, header keamanan, checksum PDF, serta jalur privat yang wajib 404. Hasil JSON menjadi artefak Actions; kegagalan ditampilkan sebagai workflow gagal. Tidak ada layanan monitoring berbayar.
+Probe harian dan smoke produksi dihentikan bersama hosting pada **10 November 2026**. Target SLO yang pernah ditulis tidak berlaku pada kondisi sekarang; tidak ada pengukuran ketersediaan layanan aktif. Riwayat probe terdahulu adalah bukti historis dan tidak menunjukkan uptime saat ini.
 
-Target awal: minimal 99% probe terjadwal berhasil selama 30 hari dan respons HTML pada tiap probe <=5 detik. Ini target untuk sinyal probe yang jarang, bukan klaim uptime, p95 pengguna, atau hasil 30 hari yang sudah tercapai.
-
-- [Workflow delivery dan bukti eksekusi](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml)
-- [Workflow kesehatan layanan](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/health.yml)
+- [Workflow CI dan bukti eksekusi](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml)
 - [Pemetaan kontrol dan rujukan primer](docs/DEVSECOPS.md)
 - [Runbook operasi dan pemulihan](docs/OPERATIONS.md)
 - [Kebijakan keamanan](SECURITY.md) dan [hasil verifikasi](VALIDATION.md)
@@ -123,6 +108,6 @@ Nama yang tidak lazim tetap mengikuti sumber, termasuk Chocolatte, Redvelvet, da
 - `DESIGN_DIRECTION.md` / `DESIGN_SYSTEM.md`: keputusan visual.
 - `lib/menu.ts`: katalog sumber; `lib/order.ts`: validasi dan perhitungan.
 - `app/`: antarmuka; `tests/`: unit dan browser.
-- `scripts/deploy.mjs`: deployment statis dengan pemeriksaan paket gratis.
+- `scripts/deploy.mjs` / `scripts/smoke.mjs`: contoh tooling hosting historis; tidak dipanggil oleh CI dan tidak memiliki credential aktif.
 
 Nama dan catatan dapat dihapus dengan tombol **Pesanan baru** pada ringkasan. Data perangkat juga dapat dihapus melalui pengaturan situs browser.
