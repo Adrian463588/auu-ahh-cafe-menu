@@ -53,7 +53,13 @@ Dialog cetak sistem, printer fisik, kunjungan pertama/reload offline, pemrosesan
 
 ## Decommission hosting — 10 November 2026
 
-Deployment dan proyek Vercel dihapus atas permintaan pengguna. Bagian deployment di atas adalah bukti historis saat aplikasi aktif; URL dan hasil pemeriksaan di sana tidak menunjukkan layanan yang tersedia sekarang. Status remote decommission, penghapusan secret/variable Actions, pencabutan token, dan hasil pemeriksaan URL akhir dicatat setelah operasi selesai.
+Deployment dan proyek Vercel dihapus atas permintaan pengguna. Bagian deployment di atas adalah bukti historis saat aplikasi aktif; URL dan hasil pemeriksaan di sana tidak menunjukkan layanan yang tersedia sekarang.
+
+- [PR #5](https://github.com/Adrian463588/auu-ahh-cafe-menu/pull/5) dan [CI PR](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42765207689) lulus. Perubahan masuk ke `main` pada `10d177ca4d67f465e1cd2f4b65c6eb453fbb9c5c`; [CI push main](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42765453831) lulus dengan workflow CI tanpa publish dan tanpa probe terjadwal.
+- Preflight API mencocokkan nama dan ID proyek cafe, satu alias bawaan `vercel.app`, empat deployment produksi, dan nol project environment variables. Tidak ada custom domain.
+- API Vercel mengonfirmasi penghapusan proyek dengan HTTP 204; lookup ID sesudahnya HTTP 404. URL publik lama juga merespons HTTP 404 dan tidak lagi menampilkan halaman cafe.
+- Pencabutan token deployment yang dipakai proyek mengembalikan HTTP 200. Listing GitHub Actions secrets dan repository variables kosong; file lokal `.env` dan metadata `.vercel/` dihapus.
+- Repository tetap privat, source aplikasi dipertahankan, dan metadata repo diperbarui supaya tidak lagi mengklaim deployment Vercel atau probe aktif.
 
 ## Perluasan portofolio DevSecOps
 
