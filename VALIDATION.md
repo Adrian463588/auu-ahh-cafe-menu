@@ -35,7 +35,7 @@ Kasus gangguan storage/clipboard diuji dengan fault injection khusus pengujian. 
 - Lighthouse lokal sesudah koreksi: Performance 98, Accessibility 100, Best Practices 100, SEO 100; LCP 976ms, CLS 0, TBT 177ms. Ini pengukuran lab satu sesi, bukan data p75/INP lapangan.
 - `evidence/lighthouse-local.json`, screenshot dalam `evidence/` dan `test-results/` tersedia secara lokal dan diabaikan Git.
 
-## Deployment
+## Deployment — historical, before decommission
 
 - Pembacaan API awal mengonfirmasi paket `hobby` pada akun tujuan.
 - Skrip deployment memeriksa kembali paket, Git bersih, commit remote, secret, dan export sebelum publikasi. Hanya hasil statis serta `vercel.json` yang dikirim.
@@ -50,6 +50,10 @@ Kasus gangguan storage/clipboard diuji dengan fault injection khusus pengujian. 
 ## Batas bukti
 
 Dialog cetak sistem, printer fisik, kunjungan pertama/reload offline, pemrosesan kasir, pembayaran, stok, dan data performa lapangan tidak diuji atau diklaim. Tidak ada integrasi tersebut pada situs ini.
+
+## Decommission hosting — 10 November 2026
+
+Deployment dan proyek Vercel dihapus atas permintaan pengguna. Bagian deployment di atas adalah bukti historis saat aplikasi aktif; URL dan hasil pemeriksaan di sana tidak menunjukkan layanan yang tersedia sekarang. Status remote decommission, penghapusan secret/variable Actions, pencabutan token, dan hasil pemeriksaan URL akhir dicatat setelah operasi selesai.
 
 ## Perluasan portofolio DevSecOps
 
@@ -68,7 +72,7 @@ Pemeriksaan lokal 6 November 2026:
 - API GitHub mengonfirmasi default permission read, larangan bot approval, allowlist Actions GitHub-owned, wajib SHA pinning, serta dependency alerts aktif.
 - Branch protection `main`: PR, strict status **Quality and security gates**, enforce admins, force-push/deletion nonaktif. Satu maintainer tidak mensyaratkan approval kedua.
 
-Verifikasi remote dijalankan melalui [DevSecOps CI/CD](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml) pada PR/push dan [Service health](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/health.yml). Log run, artefak build/proof, dan `/build-info.json` adalah lokasi bukti aktual; konfigurasi workflow saja tidak membuktikan kelulusan. SLO 30 hari tetap berupa target sampai data yang cukup tersedia.
+Verifikasi remote historis dijalankan melalui [DevSecOps CI](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml) dan workflow Service health yang kini telah dihapus. Run Actions lama tetap menjadi bukti historis; URL dan SLO lama tidak menunjukkan layanan aktif.
 
 ### Bukti remote pertama
 

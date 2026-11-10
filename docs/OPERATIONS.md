@@ -1,39 +1,28 @@
 # Runbook operasi
 
-Layanan: https://auu-ahh-cafe-menu.vercel.app. Pemilik: maintainer repository. State pesanan ada di perangkat pelanggan; deployment tidak mempunyai database atau pembayaran server.
+## Status layanan
 
-## Sinyal dan target awal
+Pada 10 November 2026, proyek Vercel dan deployment publik AUU AHH Cafe dihapus atas permintaan pemilik. Repo GitHub privat dan source aplikasi tetap ada. Tidak ada endpoint produksi, deployment otomatis, atau probe layanan aktif.
 
-Workflow `Service health` dijadwalkan harian pukul 07:17 WIB dan dapat dijalankan manual; eksekusi terjadwal GitHub dapat tertunda. Workflow delivery menjalankan pemeriksaan yang sama sesudah publikasi, ditambah alur browser kasir. Lihat hasil aktual pada artefak `health-*` / `production-proof-*`, berkas `smoke.json`.
+Probe harian dan smoke produksi sebelumnya hanya memberi sampling jarang, bukan observabilitas semua request. Target SLO terdahulu bukan target aktif dan tidak boleh dipakai sebagai klaim uptime saat ini. Bukti lama tetap dicatat di `VALIDATION.md` sebagai riwayat.
 
-SLI: jumlah probe terjadwal yang lulus seluruh pemeriksaan dibagi jumlah probe yang benar-benar dieksekusi dalam 30 hari. SLO awal: >=99% lulus. Anggaran kegagalan: 1% dari probe yang dieksekusi. Target latency sampel: respons HTML <=5000ms, dengan timeout request 10 detik.
+## Operasi CI
 
-Target mengikuti gagasan [Google SRE: Implementing SLOs](https://sre.google/workbook/implementing-slos/). Sampling harian beresolusi rendah dan tidak menghitung downtime di antara probe. Run yang tidak pernah terjadwal tidak masuk denominator; tidak ada klaim uptime atau angka historis yang dibuat-buat. Latency satu probe tidak mewakili p95 atau Core Web Vitals pengguna.
+CI berjalan pada pull request dan push `main`. Job **Quality and security gates** memeriksa dependency terkunci, workflow, lint, TypeScript, unit test, audit dependency, production build, integritas source/build, Gitleaks, browser flow, dan aksesibilitas. Workflow hanya mendapat permission `contents: read`; tidak ada secret hosting.
 
-GitHub Actions menampilkan failure sebagai sinyal tindakan; pengiriman email bergantung pada pengaturan notifikasi pengguna GitHub. Tidak ada integrasi chat/email khusus. Hindari menambahkan pesan sukses berulang ke kanal eksternal.
+1. Buka run GitHub Actions yang terkait commit/PR dan lihat job pertama yang gagal.
+2. Perbaiki lint, tipe, tes, audit, atau scanner pada branch. Jangan menambah `continue-on-error`, memperlebar allowlist, atau mematikan gate agar run hijau.
+3. Jika source/hash mismatch, bangun ulang dari commit yang benar; jangan mengedit manifest secara manual.
+4. Tinjau PR Dependabot mingguan dan tunggu seluruh gate sebelum merge.
 
-## Saat delivery gagal
+## Mengaktifkan hosting di masa depan
 
-1. Buka job pertama yang gagal di Actions. PR dan manual verification tidak mempunyai secret deployment.
-2. Jika lint/types/unit/browser/audit/Gitleaks gagal, perbaiki penyebab pada branch dan push kembali. Jangan menambahkan `continue-on-error`, memperlebar allowlist, atau mematikan gate untuk membuat run hijau.
-3. Jika hash/source mismatch, buang artefak yang berubah dan buat release melalui CI. Jangan mengedit manifest untuk menyesuaikan perubahan.
-4. Jika commit sudah bukan `main` terbaru, jalankan pipeline dari commit terbaru. Penolakan tersebut mencegah publikasi versi lama setelah push baru.
-5. Jika paket bukan Hobby atau credential tidak valid, periksa account/token melalui dashboard. Skrip tidak meng-upgrade akun. Jangan mencetak secret untuk debugging.
-6. Bila Vercel menolak build/deployment sebelum READY, periksa deployment logs. URL produksi lama biasanya tetap menunjuk release sebelumnya; pastikan langsung dengan smoke, jangan diasumsikan.
+Hanya lakukan jika diminta eksplisit oleh pemilik.
 
-## Saat layanan publik gagal
+1. Pilih provider/project dan domain yang tepat; pastikan kebutuhan penggunaan cocok dengan paket serta ketentuannya.
+2. Buat credential baru dengan hak minimum yang tersedia. Jangan gunakan ulang token yang sudah dicabut.
+3. Simpan credential lokal hanya di `.env` yang diabaikan Git; untuk CI gunakan encrypted secret yang hanya tersedia pada job publish tepercaya. Build dan job PR tidak menerima secret.
+4. Verifikasi branch, source commit, file artefak, domain, dan status provider sebelum publikasi.
+5. Aktifkan smoke check hanya setelah endpoint aktif. Definisikan SLI/SLO dari sinyal yang benar-benar dikumpulkan; jangan klaim uptime dari satu probe atau target.
 
-1. Catat waktu, run URL, source commit dari `/build-info.json`, pemeriksaan yang gagal, dan HTTP/latency yang tersedia. Jangan menyalin credential atau nama/catatan pelanggan ke tiket.
-2. Jalankan `npm run smoke` untuk memeriksa kembali. Bandingkan status [GitHub](https://www.githubstatus.com/) dan [Vercel](https://www.vercel-status.com/) jika terdapat indikasi gangguan penyedia.
-3. Bedakan kegagalan HTML/asset, commit yang tertinggal, PDF berubah, header hilang, private path terbuka, atau timeout jaringan runner. Kegagalan security boundary ditangani segera walaupun halaman utama masih dapat dibuka.
-4. Perbaiki melalui branch/PR dan tunggu CI/CD. Setelah publikasi, periksa hasil smoke serta alur kasir.
-5. Jika diperlukan pemulihan cepat, gunakan [Vercel Instant Rollback](https://vercel.com/docs/instant-rollback). Pada Hobby, targetnya hanya deployment produksi tepat sebelumnya. Verifikasi URL publik dan catat commit yang dipulihkan. Alternatif terkontrol: `git revert` perubahan bermasalah di branch baru, PR, lalu CI/CD. Jangan rewrite history atau force-push.
-6. Rollback menonaktifkan auto-assignment domain produksi. Gunakan **Undo Rollback / Promote** melalui dashboard untuk memulihkan publikasi normal; jangan menganggap push baru langsung mengubah alias. Skrip deployment menolak READY tanpa alias produksi yang diharapkan.
-7. Sesudah rollback, monitor commit bisa gagal sampai `main` dan release produksi diselaraskan. Catat pengecualian tersebut dan perbaiki source; jangan menonaktifkan pemeriksaan commit.
-
-## Perawatan rutin
-
-- Tinjau PR Dependabot npm/Actions mingguan, baca perubahan, dan merge setelah gates hijau.
-- Tinjau probe yang gagal dan data 30 hari sebelum menyimpulkan target tercapai; kurangi pekerjaan fitur bila anggaran kegagalan terpakai.
-- Periksa kuota GitHub Actions serta Vercel Hobby dan hapus artefak kedaluwarsa melalui retention yang telah disetel. Tidak ada paket berbayar yang diaktifkan oleh workflow.
-- Setelah insiden, catat dampak nyata, timeline, penyebab berdasarkan bukti, langkah pemulihan, serta satu tindakan pencegahan dengan pemiliknya. Tidak ada contoh insiden atau angka downtime fiktif di repo.
+Vercel menghapus deployment, domain, environment variables, dan pengaturan ketika sebuah proyek dihapus. Untuk sumber resmi dan batasan penghapusan, lihat [Managing projects](https://vercel.com/docs/projects/managing-projects). Pengaktifan hosting kembali memerlukan provisioning baru dan pemeriksaan ulang seluruh setting.
