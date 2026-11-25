@@ -39,9 +39,9 @@ Kasus gangguan storage/clipboard diuji dengan fault injection khusus pengujian. 
 
 - Pembacaan API awal mengonfirmasi paket `hobby` pada akun tujuan.
 - Skrip deployment memeriksa kembali paket, Git bersih, commit remote, secret, dan export sebelum publikasi. Hanya hasil statis serta `vercel.json` yang dikirim.
-- Repo dibuat dengan `gh`, bersifat privat: [Adrian463588/auu-ahh-cafe-menu](https://github.com/Adrian463588/auu-ahh-cafe-menu).
+- Repo awalnya dibuat privat dengan `gh` (kemudian dipublikasikan pada 25 November 2026): [Adrian463588/auu-ahh-cafe-menu](https://github.com/Adrian463588/auu-ahh-cafe-menu).
 - Commit aplikasi `f8ebe7121ae9de665c7bc0c0f224c2497969a282` dipush dan dicocokkan dengan remote sebelum deployment; commit berikutnya hanya menyelesaikan dokumentasi verifikasi ini.
-- URL produksi: [auu-ahh-cafe-menu.vercel.app](https://auu-ahh-cafe-menu.vercel.app), HTTP 200 dan API menyatakan READY. API akun kembali mengonfirmasi paket `hobby` sesudah deployment.
+- Deployment produksi historis di Vercel Hobby (kini telah dihapus/didecommission) sebelumnya terverifikasi HTTP 200 dan API menyatakan READY; link hosting lama tidak lagi ditautkan. API akun kembali mengonfirmasi paket `hobby` sesudah deployment.
 - Seluruh **12/12 browser test lulus di URL publik**, termasuk alur pesanan nyata dari katalog, penyimpanan perangkat, varian, jumlah, ringkasan, salin, keyboard, CSS cetak, error/offline, responsivitas, serta axe halaman/dialog pada lima ukuran.
 - PDF publik HTTP 200 dan SHA-256 cocok dengan sumber. `/.env`, `/.git/config`, `/package.json`, `/scripts/deploy.mjs` semuanya HTTP 404. Header `nosniff` dan Content Security Policy terverifikasi.
 - `.vercel/deployment.json` lokal menyimpan ID, source commit, SHA-256 artefak, status, dan URL deployment. `evidence/production-check.json` menyimpan hasil pemeriksaan publik. Keduanya diabaikan Git dan tidak memuat token.
@@ -59,7 +59,7 @@ Deployment dan proyek Vercel dihapus atas permintaan pengguna. Bagian deployment
 - Preflight API mencocokkan nama dan ID proyek cafe, satu alias bawaan `vercel.app`, empat deployment produksi, dan nol project environment variables. Tidak ada custom domain.
 - API Vercel mengonfirmasi penghapusan proyek dengan HTTP 204; lookup ID sesudahnya HTTP 404. URL publik lama juga merespons HTTP 404 dan tidak lagi menampilkan halaman cafe.
 - Pencabutan token deployment yang dipakai proyek mengembalikan HTTP 200. Listing GitHub Actions secrets dan repository variables kosong; file lokal `.env` dan metadata `.vercel/` dihapus.
-- Repository tetap privat, source aplikasi dipertahankan, dan metadata repo diperbarui supaya tidak lagi mengklaim deployment Vercel atau probe aktif.
+- Pada tahap decommission awal repository sempat tetap privat; sebelum dipublikasikan pada 25 November 2026, homepage URL repo dihapus, link hosting pada skrip/dokumentasi dibersihkan, serta 7 run Actions deploy/health lama beserta lognya dihapus.
 
 ## Perluasan portofolio DevSecOps
 
@@ -85,8 +85,8 @@ Verifikasi remote historis dijalankan melalui [DevSecOps CI](https://github.com/
 | Bukti | Hasil aktual |
 | --- | --- |
 | [PR #1](https://github.com/Adrian463588/auu-ahh-cafe-menu/pull/1) / [run PR](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42161470183) | Quality/security lulus; job publikasi dan produksi skipped sesuai kebijakan PR |
-| [Run push main](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42161809911) | Ketiga job quality/security, deployment Hobby, dan smoke produksi lulus pada commit `f8d2029b76e4f1365e90863003efd13dfeb3b2a0` |
-| [Service health manual](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/runs/42162369564) | Probe lulus pada commit yang sama; ini satu eksekusi nyata, bukan data SLO 30 hari |
+| Run push main historis (`f8d2029b76e4f1365e90863003efd13dfeb3b2a0`) | Ketiga job quality/security, deployment Hobby, dan smoke produksi lulus sebelum decommission; run/log deploy lama dihapus sebelum publikasi repo |
+| Service health manual historis (`f8d2029b76e4f1365e90863003efd13dfeb3b2a0`) | Probe lulus pada commit yang sama sebelum decommission; run/log health lama dihapus sebelum publikasi repo |
 | Artefak `static-release-f8d2029b76e4f1365e90863003efd13dfeb3b2a0` diunduh ulang | 27 fingerprint file/config cocok; source SHA cocok; SHA-256 manifest `222e4916f6620b45afe6e77c7c9e1cc8ba9c0ee0388941728322f83cc9245281`; Gitleaks dan pencocokan token aktual: 0 temuan |
 | Log PR dan push main | 88.445 dan 217.936 byte log dipindai dengan Gitleaks redacted serta dibandingkan dengan token lokal tanpa mencetaknya; 0 temuan |
 
