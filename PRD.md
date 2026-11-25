@@ -27,7 +27,7 @@ Pesanan hanya disimpan pada perangkat pengunjung. Penyusunan ringkasan bukan pen
 - Keranjang dan detail pemesan tersimpan di localStorage; validasi ulang struktur, ID menu, varian, dan jumlah saat dipulihkan. Nama/catatan tidak dikirim ke server.
 - Filter kategori dan pencarian tersimpan di URL agar navigasi Back tetap bermakna.
 - Tersedia PDF menu asli untuk referensi, tanpa mengubah dokumen sumber.
-- Repo GitHub privat; saat ini CI tidak menggunakan secret deployment.
+- Repo GitHub publik; saat ini CI tidak menggunakan secret deployment.
 - Hosting Vercel sebelumnya didecommission pada 10 November 2026; tidak ada endpoint produksi aktif.
 
 ## State dan aksesibilitas
@@ -84,4 +84,4 @@ Acceptance tambahan:
 
 ## Status setelah decommission
 
-Pada 10 November 2026, pengguna meminta aplikasi Vercel yang sudah dideploy dihapus. Workflow publikasi dan health terjadwal dihentikan, proyek Vercel dihapus, lalu credential deployment dicabut dari `.env` dan GitHub Actions. Source aplikasi serta repo privat dipertahankan; CI tetap memeriksa source/build tanpa mempublikasikan. Checklist deployment di atas adalah bukti historis, bukan status hosting saat ini. Pembuatan hosting baru memerlukan permintaan eksplisit.
+Pada 10 November 2026, pengguna meminta aplikasi Vercel yang sudah dideploy dihapus. Workflow publikasi dan health terjadwal dihentikan, proyek Vercel dihapus, lalu credential deployment dicabut dari `.env` dan GitHub Actions. Source aplikasi dipertahankan (repo kemudian dipublikasikan pada 25 November 2026 setelah audit DevSecOps serta pembersihan link hosting dan log deploy/health lama); CI tetap memeriksa source/build tanpa mempublikasikan. Checklist deployment di atas adalah bukti historis, bukan status hosting saat ini. Pembuatan hosting baru memerlukan permintaan eksplisit.

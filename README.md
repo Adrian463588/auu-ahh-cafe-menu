@@ -4,9 +4,9 @@ Portofolio sederhana untuk menunjukkan praktik DevOps dan DevSecOps pada aplikas
 
 [![DevSecOps CI](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml/badge.svg?branch=main)](https://github.com/Adrian463588/auu-ahh-cafe-menu/actions/workflows/ci.yml)
 
-[Repo privat](https://github.com/Adrian463588/auu-ahh-cafe-menu)
+[Repositori publik](https://github.com/Adrian463588/auu-ahh-cafe-menu)
 
-Repo saat ini privat; akses source, badge, dan log Actions mengikuti izin GitHub. Hosting hanya memakai berkas statis, tanpa database atau runtime function.
+Repo bersifat publik dengan verifikasi CI saja; akses source, badge, dan log Actions terbuka untuk ditinjau. Hosting hanya memakai berkas statis, tanpa database atau runtime function.
 
 ## Yang diperagakan
 
@@ -79,13 +79,13 @@ Pengujian browser memakai katalog nyata untuk alur pesanan, ringkasan, pencarian
 
 ## Status hosting
 
-Proyek Vercel dan deployment yang sebelumnya aktif dihapus pada **10 November 2026** sesuai permintaan. Domain produksi, deployment, environment variables, dan pengaturan yang terikat pada proyek ikut terhapus. Repo GitHub privat dan source aplikasi tetap tersedia; tidak ada URL publik aktif.
+Proyek Vercel dan deployment yang sebelumnya aktif dihapus pada **10 November 2026** sesuai permintaan. Domain produksi, deployment, environment variables, dan pengaturan yang terikat pada proyek ikut terhapus. Repo GitHub publik dan source aplikasi tetap tersedia; tidak ada URL produksi aktif.
 
 Credential deployment lokal dan GitHub Actions telah dicabut/dihapus. Workflow tidak melakukan deployment. `scripts/deploy.mjs` dan `scripts/smoke.mjs` dipertahankan sebagai kode contoh yang tidak dipanggil CI; menjalankannya memerlukan konfigurasi hosting baru dan credential baru. Jangan menghidupkan deployment atau membuat proyek hosting baru tanpa permintaan eksplisit.
 
 Hosting sebelumnya menggunakan [Vercel Hobby](https://vercel.com/docs/plans/hobby), yang ditujukan untuk penggunaan personal/nonkomersial. Aturan paket itu hanya konteks untuk deployment historis, bukan konfigurasi aktif.
 
-GitHub memakai runner Linux standar, timeout per job, dan retensi artefak 3–7 hari. Pemakaian Actions pada repo privat tetap mengikuti kuota akun; tidak ada upgrade paket atau runner berbayar yang dikonfigurasi.
+GitHub memakai runner Linux standar, timeout per job, dan retensi artefak 3–7 hari. Tidak ada upgrade paket atau runner berbayar yang dikonfigurasi.
 
 ## Operasi dan bukti
 

@@ -12,7 +12,7 @@
 - The Vercel project has been decommissioned; there is no active deployment credential or publishing workflow. Do not recreate or reconnect hosting unless the user explicitly requests it.
 - `.env*`, `.vercel/`, build outputs, local evidence, and dependencies are ignored. No hosting credential is currently required.
 - Never print credentials, commit them, expose them in browser assets, or send them to unrelated services. If hosting is explicitly reauthorized later, create a new narrowly scoped token and store it only in ignored `.env` / encrypted GitHub Actions secrets.
-- Keep the GitHub repository private. Stage only intended files.
+- Keep the GitHub repository free of credentials, secrets, and inactive hosting links. Stage only intended files.
 - If future deployment is explicitly requested, verify the live billing plan is `hobby`; never enable Pro, a trial, paid storage, or paid add-ons.
 - Vercel Hobby is restricted to personal, non-commercial use.
 

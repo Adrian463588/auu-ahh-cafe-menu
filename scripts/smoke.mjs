@@ -1,7 +1,9 @@
 import { mkdir, readFile, writeFile } from "node:fs/promises";
 import { createHash } from "node:crypto";
 
-const site = new URL(process.env.SITE_URL || "https://auu-ahh-cafe-menu.vercel.app");
+const rawSiteUrl = process.env.SITE_URL;
+if (!rawSiteUrl) throw new Error("Configure SITE_URL with an HTTPS URL before running smoke checks.");
+const site = new URL(rawSiteUrl);
 if (site.protocol !== "https:" || site.username || site.password) throw new Error("Smoke checks require an HTTPS URL without credentials.");
 const checks = [];
 const report = { checkedAt: new Date().toISOString(), site: site.origin, sourceCommit: null, htmlLatencyMs: null, checks };

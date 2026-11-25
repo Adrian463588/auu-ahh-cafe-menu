@@ -2,7 +2,7 @@
 
 ## Status layanan
 
-Pada 10 November 2026, proyek Vercel dan deployment publik AUU AHH Cafe dihapus atas permintaan pemilik. Repo GitHub privat dan source aplikasi tetap ada. Tidak ada endpoint produksi, deployment otomatis, atau probe layanan aktif.
+Pada 10 November 2026, proyek Vercel dan deployment publik AUU AHH Cafe dihapus atas permintaan pemilik. Source aplikasi dipertahankan pada repo GitHub publik tanpa link hosting atau credential aktif. Tidak ada endpoint produksi, deployment otomatis, atau probe layanan aktif.
 
 Probe harian dan smoke produksi sebelumnya hanya memberi sampling jarang, bukan observabilitas semua request. Target SLO terdahulu bukan target aktif dan tidak boleh dipakai sebagai klaim uptime saat ini. Bukti lama tetap dicatat di `VALIDATION.md` sebagai riwayat.
 
